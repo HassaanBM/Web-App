@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Users List</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&display=swap');
+
+    /* Reset styles */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    /* Body styling */
+    body {
+      display: flex;
+      flex-flow: column;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background-color: #f4f4f9;
+      font-family: 'Open Sans', sans-serif;
+    }
+
+    /* Card styling */
+    .card {
+      background-color: #fff;
+      border-radius: 10px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      padding: 20px;
+      text-align: center;
+      width: 300px;
+    }
+
+    .card img {
+      width: 100%;
+      border-radius: 50%;
+      aspect-ratio: 1/1;
+    }
+
+    .card h2 {
+      margin-top: 14px;
+      margin-bottom: 4px;
+      font-size: 32px;
+      color: #333;
+      font-weight: 400;
+    }
+
+    .card h4 {
+      font-size: 20px;
+      color: #999;
+      margin-bottom: 10px;
+      font-weight: 600;
+    }
+
+    .card p {
+      font-size: 16px;
+      color: #555;
+      font-weight: 400;
+    }
+
+    /* Timer styling */
+    .timer {
+      margin-top: 16px;
+      font-size: 16px;
+      color: #ff4500;
+      font-weight: 700;
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <img id="profileImage" src="<?= profileImage ?>" alt="Profile Image">
+    <h2 id="profileName"><?= profileName ?></h2>
+    <h4 id="profileDesignation"><?= profileDesignation ?></h4>
+    <p id="profileAbout"><?= profileAbout ?></p>
+    <a id="profilePhonenumber" href="tel:<?= profilePhonenumber ?>"><?= profilePhonenumber ?></a>
+  </div>
+  <div class="timer">
+    Redirecting in <span id="countdown"><?= countdownSeconds ?></span> seconds...
+  </div>
+
+  <script>
+    // Redirection script
+    let countdownSeconds = <?= countdownSeconds ?>;
+    let linkURL = "<?= linkURL ?>";
+    const countdownElement = document.getElementById('countdown');
+
+    const interval = setInterval(() => {
+      countdownElement.textContent = countdownSeconds;
+      countdownSeconds--;
+
+      if (countdownSeconds < 0) {
+        clearInterval(interval);
+        window.location.href = linkURL;
+      }
+    }, 1000);
+
+    function refreshData() {
+      // Call Apps Script function to refresh data
+      google.script.run.refreshAppData();
+    }
+  </script>
+</body>
+</html>
