@@ -16,6 +16,7 @@ function doGet(e) {
     const userRow = data.find(row => row[2] == searchNumber);     // Search column C (index 2)
 
     if (userRow) {
+      template.nicNumber = userRow[2];                            // Column C
       template.profileImage = userRow[3];                         // Column D
       template.profileName = userRow[4];                          // Column E
       template.profileDesignation = userRow[6];                   // Column G
@@ -33,6 +34,7 @@ function doGet(e) {
     let listHTML = '';
     for (let i = 1; i < data.length; i++) {
       if (data[i][2]) { // Check if there is a value in the 3rd column (index 2)
+        const nic = data[i][2];
         const image = data[i][3];
         const name = data[i][4];
         const phone = data[i][5];
@@ -43,6 +45,7 @@ function doGet(e) {
           <div class="card">
             <img src="${image}" alt="Profile Image">
             <h2>${name}</h2>
+            <h3>${nic}</h3>
             <h4>${role}</h4>
             <p>${area}</p>
             <a href="tel:${phone}">${phone}</a>
@@ -66,6 +69,9 @@ function doGet(e) {
   }
 }
 
+
+
+
 // Function to get cached data or refresh from the sheet if not cached
 function getCachedData() {
   const cache = CacheService.getScriptCache();
@@ -82,17 +88,19 @@ function getCachedData() {
   }
 }
 
+
 // Function to refresh the app data and force the cache to update
 function refreshAppData() {
   const sheet = SpreadsheetApp.openByUrl(SHEET_URL).getActiveSheet();
   const data = sheet.getDataRange().getValues();
-
   const cache = CacheService.getScriptCache();
   // Update the cache with the latest data
   cache.put('userData', JSON.stringify(data), CACHE_DURATION);
-
   Logger.log('App data refreshed and cache updated.');
 }
+
+
+
 
 // Function to set up the time-driven trigger for automatic refresh
 function createTimeDrivenTriggers() {
@@ -102,6 +110,9 @@ function createTimeDrivenTriggers() {
     .everyHours(1)  // You can adjust the interval (every minute, hour, day, etc.)
     .create();
 }
+
+
+
 
 // Run this function once manually to create the time-driven trigger
 function setupTriggers() {
